@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "db:test": "node src/test-db-connection.js",
-    "db:test-models": "node src/test-models.js"
+    "db:test-models": "node src/test-models.js",
+    "db:discover-audio": "node src/discover-audio-assets.js"
   },
   "keywords": [],
   "author": "",
