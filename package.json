@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "db:test": "node src/test-db-connection.js",
     "db:test-models": "node src/test-models.js",
-    "db:discover-audio": "node src/discover-audio-assets.js"
+    "db:discover-audio": "node src/discover-audio-assets.js",
+    "start": "node src/server.js"
   },
   "keywords": [],
   "author": "",
