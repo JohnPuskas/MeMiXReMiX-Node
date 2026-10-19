@@ -1,0 +1,8 @@
+USE master;
+GO
+
+IF DB_ID(N'MeMiXReMiX') IS NULL
+BEGIN
+    CREATE DATABASE [MeMiXReMiX];
+END;
+GO
