@@ -4,7 +4,8 @@
   "description": "MeMiXReMiX is a web application for combining synchronized instrument mp3 audio loops\r into a musical arrangement. It allows a user to dynamically combine loops of individual instruments into a layered arrangement, and also to save and replay their arrangements.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "db:test": "node src/test-db-connection.js"
   },
   "keywords": [],
   "author": "",
