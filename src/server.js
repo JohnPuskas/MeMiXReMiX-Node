@@ -1,4 +1,3 @@
-
 const express = require('express');
 const sequelize = require('./config/database');
 const initModels = require('./initialize-models');
@@ -6,6 +5,7 @@ const { audioDirectory } = require('./config/audioStorageConfig');
 
 const app = express();
 const { AudioAsset } = initModels(sequelize);
+const path = require('node:path');
 
 const PORT = process.env.PORT || 3000;
 
@@ -13,6 +13,9 @@ app.use(express.json());
 
 // Serve the mp3 files directly from the configured audio directory.
 app.use('/audio', express.static(audioDirectory));
+
+// Serve the browser-facing HTML, CSS, and JavaScript files.
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Retrieve the audio catalog data from SQL Server.
 app.get('/api/audio-assets', async (req, res) => {
