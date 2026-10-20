@@ -24,8 +24,6 @@ const { AudioAsset } = initModels(sequelize);
 
 const { audioDirectory } = require('./config/audioStorageConfig');
 
-const instrumentTypes = ['drums', 'bass', 'chords', 'melodic'];
-
 
 async function discoverAudioAssets() {
     let discoveredCount = 0;
@@ -33,6 +31,24 @@ async function discoverAudioAssets() {
     let existingCount = 0;
 
     try {
+        /*
+         * Discover instrument categories dynamically from the immediate
+         * subdirectories of the configured audio directory.
+         * 
+         * Each subdirectory name becomes an InstrumentType in the
+         * AudioAssets table.
+         * 
+         * This eliminates the need to maintain a hard-coded list of
+         * instrument categories.
+        */
+        const directoryEntries = await fs.readdir(audioDirectory, {
+            withFileTypes: true
+        });
+
+        const instrumentTypes = directoryEntries
+            .filter(entry => entry.isDirectory())
+            .map(entry => entry.name)
+            .sort();
         // Process each instrument category independently. 
         // Directory names determine the InstrumentType stored in the AudioAssets table.
         for (const instrumentType of instrumentTypes) {
