@@ -8,7 +8,7 @@
     <title>MeMiXReMiX</title>
 
     <link rel="stylesheet" href="/css/styles.css">
-    <script src="/js/app.js" defer></script>
+    <script type="module" src="/js/app.js" defer></script>
 </head>
 <body>
     <main>
@@ -20,6 +20,12 @@
             <h2>Select Your Instruments</h2>
 
             <div id="instrument-groups"></div>
+        </section>
+
+        <section id="playback-controls">
+            <h2>Playback</h2>
+            <button id="play-button" type="button" disabled>Play</button>
+            <button id="stop-button" type="button" disabled>Stop</button>
         </section>
 
     </main>
