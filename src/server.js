@@ -1,11 +1,18 @@
 const express = require('express');
+
+const path = require('node:path');
+
+// App modules
 const sequelize = require('./config/database');
 const initModels = require('./initialize-models');
 const { audioDirectory } = require('./config/audioStorageConfig');
 
+// API routes
+const createAudioAssetRoutes = require('./routes/audioAssetRoutes');
+const createSongLoopRoutes = require('./routes/songLoopRoutes');
+
 const app = express();
-const { AudioAsset } = initModels(sequelize);
-const path = require('node:path');
+const { AudioAsset, SongLoop, SongLoopAudioAsset } = initModels(sequelize);
 
 const PORT = process.env.PORT || 3000;
 
@@ -18,25 +25,11 @@ app.use('/audio', express.static(audioDirectory));
 app.use(express.static(path.join(__dirname, '../public')));
 
 // Retrieve the audio catalog data from SQL Server.
-app.get('/api/audio-assets', async (req, res) => {
-    try {
-        const audioAssets = await AudioAsset.findAll({
-            order: [
-                ['InstrumentType', 'ASC'],
-                ['RelativePath', 'ASC']
-            ]
-        });
-
-        res.json(audioAssets);
-    } catch (err) {
-        console.error('Error retrieving audio assets:', err);
-
-        res.status(500).json({
-            error: 'Unable to retrieve audio assets.'
-        });
-    }
-});
-
+app.use(
+    '/api/audio-assets',
+    createAudioAssetRoutes(AudioAsset)
+);
+app.use('/api/song-loops', createSongLoopRoutes(AudioAsset, SongLoop, SongLoopAudioAsset));
 
 async function startServer() {
     try {
