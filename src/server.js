@@ -9,7 +9,7 @@ const { audioDirectory } = require('./config/audioStorageConfig');
 
 // API routes
 const createAudioAssetRoutes = require('./routes/audioAssetRoutes');
-const songLoopRoutes = require('./routes/songLoopRoutes');
+const createSongLoopRoutes = require('./routes/songLoopRoutes');
 
 const app = express();
 const { AudioAsset } = initModels(sequelize);
@@ -29,7 +29,7 @@ app.use(
     '/api/audio-assets',
     createAudioAssetRoutes(AudioAsset)
 );
-app.use('/api/song-loops', songLoopRoutes);
+app.use('/api/song-loops', createSongLoopRoutes(AudioAsset));
 
 async function startServer() {
     try {
