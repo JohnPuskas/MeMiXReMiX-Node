@@ -6,7 +6,10 @@ const express = require('express');
  *
  * AudioAsset - Initialized Sequelize model for AudioAssets.
  */
-function createSongLoopRoutes(AudioAsset) {
+function createSongLoopRoutes(AudioAsset, SongLoop, SongLoopAudioAsset) {
+
+    const sequelize = AudioAsset.sequelize;
+
     const router = express.Router();
 
     /**
@@ -198,16 +201,48 @@ function createSongLoopRoutes(AudioAsset) {
 
             /*
              * Validation succeeded.
+             * Persist the validated musical arrangement.
              */
-            return res.status(501).json({
-                message:
-                    'Song loop validation passed.',
-                received: {
-                    name: name.trim(),
+            const savedSongLoop = await sequelize.transaction(
+                async transaction => {
+                    // Create the parent SongLoops record.
+                    const songLoop = await SongLoop.create(
+                        {
+                            Name: name.trim(),
+                            CreatedAt: new Date()
+                        },
+                        {
+                            transaction
+                        }
+                    );
+                    /*
+                      * Build one junction-table record for each selected
+                      * audio asset because SongLoop/AudioAssets is many-to-many.
+                      */
+                    const associations = audioAssetIds.map(id => ({
+                        SongLoopId: songLoop.SongLoopId,
+                        AudioAssetId: id
+                    }));
+
+                    // Insert all association records within the transaction.
+                    await SongLoopAudioAsset.bulkCreate(
+                        associations,
+                        {
+                            transaction
+                        }
+                    );
+                    return songLoop;
+                }
+            );
+            return res.status(201).json({
+                message: 'Song loop saved successfully.',
+                songLoop: {
+                    songLoopId: savedSongLoop.SongLoopId,
+                    name: savedSongLoop.Name,
+                    createdAt: savedSongLoop.CreatedAt,
                     audioAssetIds
                 }
             });
-
         } catch (error) {
             console.error('Song loop validation failed:', error);
 
