@@ -41,11 +41,11 @@ The application is being developed with Node.js, Express, JavaScript, and Micros
 - Automated discovery and registration of MP3 assets.
 - REST API endpoint for retrieving available audio assets.
 - Dynamic generation of instrument-selection controls.
+- Static serving of MP3 files through Express.
+- Synchronized playback and looping using the Web Audio API.
 
 ## Planned Functionality
 
-- Static serving of MP3 files through Express.
-- Synchronized playback and looping using the Web Audio API.
 - Saving user-created arrangements to SQL Server.
 - Retrieving and replaying previously saved arrangements.
 - Improved playback controls and user interface.
